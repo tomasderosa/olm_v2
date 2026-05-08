@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>OLM - Estudios de Suelos</title>
+    <link rel="icon" type="image/png" href="assets/ico_isologo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --azul-profundo: #344C5F;
+            --arena: #CBA666;
+            --tierra: #795935;
+            --blanco: #FFFFFF;
+            --gris-claro: #F5F7FA;
+            --transicion: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--blanco);
+            color: var(--azul-profundo);
+            overflow-x: hidden;
+        }
+
+        /* Utilidades de animación */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: var(--transicion);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            background: var(--azul-profundo);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: var(--transicion);
+        }
+
+        header.scrolled {
+            padding: 10px 5%;
+            background: rgba(52, 76, 95, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 55px;
+            transition: var(--transicion);
+        }
+
+        header.scrolled .logo img {
+            height: 45px;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--blanco);
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transicion);
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--arena);
+            bottom: -5px;
+            left: 0;
+            transition: var(--transicion);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: var(--arena);
+        }
+
+        /* HERO */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(52, 76, 95, 0.85) 0%, rgba(52, 76, 95, 0.6) 100%),
+                        url('assets/portada.png') center/cover no-repeat;        
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            color: var(--blanco);
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: var(--arena);
+        }
+
+        .hero-bar {
+            width: 80px;
+            height: 6px;
+            background: var(--arena);
+            margin-bottom: 30px;
+            transition: width 0.5s ease;
+        }
+
+        .hero:hover .hero-bar {
+            width: 150px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            line-height: 1.6;
+            font-weight: 300;
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            padding: 18px 40px;
+            background: var(--arena);
+            color: var(--azul-profundo);
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: var(--transicion);
+            border: 2px solid var(--arena);
+        }
+
+        .hero-btn:hover {
+            background: transparent;
+            color: var(--arena);
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--blanco);
+            font-size: 24px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
+        }
+
+        /* GENERAL SECTION */
+        section {
+            padding: 100px 5%;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--azul-profundo);
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 15px;
+        }
+
+        .section-bar {
+            width: 80px;
+            height: 6px;
+            background: var(--arena);
+        }
+
+        /* ABOUT */
+        .about {
+            background-color: var(--blanco);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+
+        .about-content {
+            flex: 1;
+        }
+
+        .about-content p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .about-image {
+            flex: 1;
+            position: relative;
+        }
+
+        .about-image img {
+            display: block;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(52, 76, 95, 0.15);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--arena);
+            top: 20px;
+            left: -20px;
+            z-index: -1;
+            border-radius: 8px;
+        }
+
+        .about-image::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, rgba(52, 76, 95, 0.6) 0%, rgba(52, 76, 95, 0.4) 100%);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        /* SERVICES */
+        .services {
+            background-color: var(--gris-claro);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--blanco);
+            padding: 50px 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            transition: var(--transicion);
+            border-bottom: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--azul-profundo);
+            z-index: -1;
+            transition: var(--transicion);
+        }
+
+        .service-card:hover::before {
+            height: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-bottom-color: var(--arena);
+            box-shadow: 0 20px 40px rgba(52, 76, 95, 0.2);
+        }
+
+        .service-icon {
+            font-size: 40px;
+            color: var(--arena);
+            margin-bottom: 25px;
+            transition: var(--transicion);
+        }
+
+        .service-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: var(--azul-profundo);
+            transition: var(--transicion);
+        }
+
+        .service-card p {
+            color: #666;
+            line-height: 1.6;
+            transition: var(--transicion);
+        }
+
+        .service-card:hover h3,
+        .service-card:hover p {
+            color: var(--blanco);
+        }
+
+        /* METRICS / CTA BAND */
+        .metrics {
+            background: var(--tierra);
+            color: var(--blanco);
+            padding: 80px 5%;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .metric-item h4 {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--arena);
+            margin-bottom: 10px;
+        }
+
+        .metric-item p {
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* CONTACT CTA */
+        .contact-cta {
+            background: linear-gradient(rgba(52, 76, 95, 0.9), rgba(52, 76, 95, 0.9)), url('assets/perfil_fondo.jpg') center/cover;
+            padding: 100px 5%;
+            text-align: center;
+            color: var(--blanco);
+        }
+
+        .contact-cta h2 {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .contact-cta p {
+            font-size: 18px;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #1F2E3A; /* Más oscuro que el azul profundo */
+            color: var(--blanco);
+            padding: 60px 5% 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo img {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .footer-col h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--arena);
+            text-transform: uppercase;
+        }
+
+        .footer-col p, .footer-col a {
+            color: #A0B0BE;
+            text-decoration: none;
+            line-height: 1.8;
+            display: block;
+            margin-bottom: 10px;
+            transition: var(--transicion);
+        }
+
+        .footer-col a:hover {
+            color: var(--arena);
+            transform: translateX(5px);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .footer-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            color: var(--blanco);
+        }
+
+        .footer-social a:hover {
+            background: var(--arena);
+            transform: translateY(-3px);
+            color: var(--azul-profundo);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #A0B0BE;
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 56px; }
+            .about { flex-direction: column; }
+            .about-image { margin-top: 40px; width: 100%; max-width: 600px; }
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 15px 5%; flex-direction: column; gap: 15px; }
+            nav { gap: 15px; flex-wrap: wrap; justify-content: center; }
+            .hero h1 { font-size: 42px; }
+            .section-title { font-size: 36px; }
+            .hero { text-align: center; }
+            .hero-bar { margin: 0 auto 30px; }
+            .scroll-down { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header id="header">
+    <div class="logo">
+        <a href="#">
+            <img src="assets/olm_blanco_transparente_2.png" alt="OLM Estudios de Suelos">
+        </a>
+    </div>
+    <nav>
+        <a href="#nosotros">Nosotros</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#contacto">Contacto</a>
+    </nav>
+</header>
+
+<section class="hero" id="inicio">
+    <div class="hero-content reveal">
+        <h1>SOMOS <span>OLM</span></h1>
+        <div class="hero-bar"></div>
+        <p>
+            Consultora especializada en ingeniería geotécnica y análisis de suelos. 
+            Soluciones integrales para obras civiles, desarrollos inmobiliarios, infraestructura 
+            y proyectos energéticos en todo el país.
+        </p>
+        <a href="#servicios" class="hero-btn">Descubrir Servicios</a>
+    </div>
+    <a href="#nosotros" class="scroll-down"><i class="fa-solid fa-chevron-down"></i></a>
+</section>
+
+<section id="nosotros" class="about">
+    <div class="about-content reveal">
+        <div class="section-header">
+            <h2 class="section-title">Nuestra Empresa</h2>
+            <div class="section-bar"></div>
+        </div>
+        <p>
+            OLM es una empresa argentina con visión de excelencia, dedicada al estudio y caracterización geotécnica del terreno. 
+            Nuestro enfoque integral permite garantizar la seguridad, estabilidad y viabilidad de cada proyecto.
+        </p>
+        <p>
+            Contamos con vasta experiencia técnica en estudios de campo, ensayos de laboratorio, 
+            análisis de fundaciones y modelado geotécnico avanzado. Nos regimos por estándares rigurosos 
+            para brindar confianza y solidez a nuestros clientes.
+        </p>
+    </div>
+    <div class="about-image reveal">
+        <img src="assets/foto_spt.jpeg" alt="Estudios geotécnicos OLM">
+    </div>
+</section>
+
+<section id="servicios" class="services">
+    <div class="section-header reveal">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <div class="section-bar"></div>
+    </div>
+
+    <div class="services-grid">
+        <div class="service-card reveal">
+            <div class="service-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <h3>Estudios de Suelo</h3>
+            <p>Sondeos, perforaciones, SPT, extracción de muestras y caracterización geotécnica de alta precisión.</p>
+        </div>
+
+        <div class="service-card reveal">
+            <div class="service-icon"><i class="fa-solid fa-flask"></i></div>
+            <h3>Ensayos de Laboratorio</h3>
+            <p>Clasificación, límites de Atterberg, corte directo, consolidación y ensayos triaxiales con equipamiento de vanguardia.</p>
+        </div>
+
+        <div class="service-card reveal">
+            <div class="service-icon"><i class="fa-solid fa-building"></i></div>
+            <h3>Análisis de Fundaciones</h3>
+            <p>Dimensionamiento, diseño y verificación integral de fundaciones superficiales y profundas.</p>
+        </div>
+
+        <div class="service-card reveal">
+            <div class="service-icon"><i class="fa-solid fa-file-contract"></i></div>
+            <h3>Informes Técnicos</h3>
+            <p>Elaboración de reportes geotécnicos completos y visados para presentación ante autoridades y organismos.</p>
+        </div>
+    </div>
+</section>
+
+<section class="metrics">
+    <div class="metric-item reveal">
+        <h4>+5</h4>
+        <p>Años de Experiencia</p>
+    </div>
+    <div class="metric-item reveal">
+        <h4>+15</h4>
+        <p>Estudios a disposición</p>
+    </div>
+    <div class="metric-item reveal">
+        <h4>100%</h4>
+        <p>Compromiso y Calidad</p>
+    </div>
+</section>
+
+<section id="contacto" class="contact-cta">
+    <div class="reveal">
+        <h2>¿Listo para impulsar tu proyecto?</h2>
+        <p>Un estudio de suelo sólido es la base de toda gran obra. Contactanos para recibir asesoramiento técnico personalizado por parte de nuestros especialistas.</p>
+        <a href="mailto:info@olm-consultora.com" class="hero-btn">Escribinos Ahora</a>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-grid">
+        <div class="footer-col footer-logo">
+            <img src="assets/logo_olm_transparente_letras_blancas.png" alt="OLM">
+            <p>Soluciones técnicas integrales en ingeniería geotécnica.</p>
+            <div class="footer-social">
+                <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Secciones</h4>
+            <a href="#inicio">Inicio</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#servicios">Servicios</a>
+        </div>
+        <div class="footer-col">
+            <h4>Contacto</h4>
+            <p><i class="fa-solid fa-location-dot"></i> Buenos Aires, Argentina</p>
+            <p><i class="fa-solid fa-phone"></i> +54 299 000 0000</p>
+            <a href="mailto:info@olm-consultora.com"><i class="fa-solid fa-envelope"></i> info@olm-consultora.com</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 OLM Estudios de Suelos. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script>
+    // Header Sticky Effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Reveal on Scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const revealOptions = {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) {
+                return;
+            } else {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, revealOptions);
+
+    reveals.forEach(reveal => {
+        revealOnScroll.observe(reveal);
+    });
+</script>
+
+</body>
+</html>
